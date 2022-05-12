@@ -29,17 +29,17 @@
 </p>
 
 
-**Stuff for RCON [R]**
+**Stuff for RCON [AAR]**
 
 Optimized stuff for RCON via scenario/mod
 
-* In order to detect if it's scenario or mod use: `/sc if remote.interfaces.R then remote.call("R", "getSource") end`
+* In order to detect if it's scenario or mod use: `/sc if remote.interfaces.AAR then remote.call("AAR", "getSource") end`
 * If it's a scenario use something like this to get results: `/sc someFunction(parameters)`
-* If it's a mod use something like this to get results: `/sc __R__ someFunction(parameters)`
+* If it's a mod use something like this to get results: `/sc __AAR__ someFunction(parameters)`
 * You should active the mod by calling "activate()" via rcon, before calling any other fuction.
 
 <p align="center">
-<a href="https://mods.factorio.com/mod/R/downloads"><strong>Download the mod&nbsp;&nbsp;▶</strong></a>
+<a href="https://mods.factorio.com/mod/AAR/downloads"><strong>Download the mod&nbsp;&nbsp;▶</strong></a>
 </p>
 
 
