@@ -1,0 +1,12 @@
+{
+  "name": "R",
+  "version": "0.5.0",
+  "factorio_version": "1.1",
+  "title": "Stuff for RCON",
+  "author": "ZwerOxotnik",
+  "contact": "zweroxotnik@gmail.com, discord:ZwerOxotnik#7117",
+  "source": "https://github.com/ZwerOxotnik/factorio-RCON-stuff",
+  "homepage": "https://reddit.com/r/ZwerOxotnik",
+  "description": "Optimized stuff for RCON via scenario/mod",
+  "dependencies": []
+}
