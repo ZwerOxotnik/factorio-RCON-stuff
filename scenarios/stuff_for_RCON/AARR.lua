@@ -22,6 +22,13 @@ remote.add_interface("AARR", {
 function activate()
 	is_server = true
 end
+function is_activated()
+	if is_server then
+		print_to_rcon('+')
+	else
+		print_to_rcon('-')
+	end
+end
 function deactivate()
 	is_server = false
 end
