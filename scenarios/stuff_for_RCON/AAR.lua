@@ -1,8 +1,8 @@
 -- Optimized stuff for RCON via scenario/mod
 
--- In order to detect if it's scenario or mod use: /sc if remote.interfaces.AAR then remote.call("AAR", "getSource") end
+-- In order to detect if it's scenario or mod use: /sc if remote.interfaces.AARR then remote.call("AARR", "getSource") end
 -- If it's a scenario use something like this to get results: /sc someFunction(parameters)
--- If it's a mod use something like this to get results: /sc __AAR__ someFunction(parameters)
+-- If it's a mod use something like this to get results: /sc __AARR__ someFunction(parameters)
 -- You should active the mod by calling "activate()" via rcon, before calling any other fuction.
 
 -- Source: https://github.com/ZwerOxotnik/factorio-RCON-stuff
@@ -13,9 +13,9 @@ local is_server = false
 local print_to_rcon = rcon.print
 
 
-remote.add_interface("AAR", {
+remote.add_interface("AARR", {
 	getSource = function()
-		print_to_rcon(script.mod_name) -- Returns "level" if it's a scenario, otherwise "AAR" as a mod.
+		print_to_rcon(script.mod_name) -- Returns "level" if it's a scenario, otherwise "AARR" as a mod.
 	end
 })
 
@@ -89,7 +89,7 @@ function isSomeoneOnServer()
 end
 
 
-local TwitchMessage = {'AAR.print_twitch_message', '', ''}
+local TwitchMessage = {'AARR.print_twitch_message', '', ''}
 ---@param nickname string
 ---@param message string
 function printTwitchMessage(nickname, message)

@@ -1,5 +1,5 @@
-if script.active_mods.AAR then
-	require("__AAR__/scenarios/stuff_for_RCON/AAR")
+if script.active_mods.AARR then
+	require("__AARR__/scenarios/stuff_for_RCON/AARR")
 else
-	require("stuff_for_RCON/AAR")
+	require("stuff_for_RCON/AARR")
 end
