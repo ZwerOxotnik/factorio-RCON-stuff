@@ -1,4 +1,8 @@
 ﻿---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 2022-05-21
+    - Added: getPlayerInfo, getForceInfo, isPlayerAFK, giveItemStackToPLayer, giveItemToPLayer, printDiscordMessage
+---------------------------------------------------------------------------------------------------
 Version: 0.5.2
 Date: 2022-05-13
   Bugfixes:
