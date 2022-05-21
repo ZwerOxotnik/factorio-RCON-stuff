@@ -345,6 +345,116 @@ function isSomeoneOnServer()
 	end
 end
 
+local surface_info = {
+	name = "",
+	index = 1,
+	ticks_per_day = 1,
+	wind_speed = 1.0,
+	wind_orientation_change = 1.0, -- Change in wind orientation per tick.
+	solar_power_multiplier = 1.0,
+	total_pollution = 0.0,
+	always_day = false,
+	freeze_daytime = false, -- True if daytime is currently frozen.
+	peaceful_mode = false,
+	players = {},
+	online_players = {},
+	offline_players = {}
+}
+-- TODO: add more data
+-- https://lua-api.factorio.com/latest/LuaSurface.html
+---@param surface string|integer
+function getSurfaceInfo(surface)
+	if not is_server then return end
+
+	surface = game.surfaces[surface]
+	---@cast surface table
+	if not (surface and surface.valid) then return end
+
+	surface_info.name = surface.name
+	surface_info.index = surface.index
+	surface_info.ticks_per_day = surface.ticks_per_day
+	surface_info.always_day = surface.always_day
+	surface_info.freeze_daytime = surface.freeze_daytime
+	surface_info.peaceful_mode = surface.peaceful_mode
+	surface_info.wind_speed = surface.wind_speed
+	surface_info.wind_orientation_change = surface.wind_orientation_change
+	surface_info.solar_power_multiplier = surface.solar_power_multiplier
+	surface_info.total_pollution = surface.get_total_pollution()
+
+	surface_info.players = {}
+	surface_info.online_players = {}
+	surface_info.offline_players = {}
+	for _, player in pairs(game.players) do
+		if player.valid and player.surface == surface then
+			surface_info.players[player.index] = player.name
+			if player.connected then
+				surface_info.online_players[player.index] = player.name
+			else
+				surface_info.offline_players[player.index] = player.name
+			end
+		end
+	end
+
+	print_to_rcon(game.table_to_json(surface_info))
+end
+
+
+local game_info = {
+	difficulty = 1, -- https://lua-api.factorio.com/latest/defines.html#defines.difficulty
+	tick = 0,
+	ticks_played = 0, -- The number of ticks since this game was 'created'.
+	ticks_to_run = 0, -- The number of ticks to be run while the tick is paused.
+	speed = 0.0,
+	tick_paused = false,
+	players = {},
+	online_players = {},
+	offline_players = {},
+	surfaces = {},
+	forces = {}
+}
+-- TODO: add more data
+-- https://lua-api.factorio.com/latest/LuaGameScript.html
+function getGameInfo()
+	if not is_server then return end
+
+	game_info.difficulty = surface.difficulty
+	game_info.tick = surface.tick
+	game_info.ticks_played = surface.ticks_played
+	game_info.ticks_to_run = surface.ticks_to_run
+	game_info.speed = surface.speed
+	game_info.tick_paused = surface.tick_paused
+
+	game_info.players = {}
+	game_info.online_players = {}
+	game_info.offline_players = {}
+	for _, player in pairs(surface.players) do
+		if player.valid then
+			game_info.players[player.index] = player.name
+			if player.connected then
+				game_info.online_players[player.index] = player.name
+			else
+				game_info.offline_players[player.index] = player.name
+			end
+		end
+	end
+
+	game_info.surfaces = {}
+	for _, surface in pairs(surface.surfaces) do
+		if surface.valid then
+			game_info.surfaces[surface.index] = surface.name
+		end
+	end
+
+	game_info.forces = {}
+	for _, force in pairs(surface.forces) do
+		if force.valid then
+			game_info.forces[force.index] = force.name
+		end
+	end
+
+	print_to_rcon(game.table_to_json(game_info))
+end
+
 
 local TwitchMessage = {'AARR.print_twitch_message', '', ''}
 ---@param nickname string

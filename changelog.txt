@@ -1,6 +1,13 @@
 ﻿---------------------------------------------------------------------------------------------------
+Version: 0.5.4
+Date: 2022-05-21
+  Scripting:
+    - Added: getGameInfo, getSurfaceInfo
+    - (Perhaps, some stuff will be changed)
+---------------------------------------------------------------------------------------------------
 Version: 0.5.3
 Date: 2022-05-21
+  Scripting:
     - Added: getPlayerInfo, getForceInfo, isPlayerAFK, giveItemStackToPLayer, giveItemToPLayer, printDiscordMessage
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.2
