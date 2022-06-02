@@ -50,6 +50,27 @@ remote.add_interface("AARR", {
 })
 
 
+local function update_player_data(data)
+	data.players = {}
+	local players = data.players
+	data.online_players = {}
+	local online_players = data.online_players
+	data.offline_players = {}
+	local offline_players = data.offline_players
+	for _, player in pairs(_force.players) do
+		if player.valid then
+			local player_index = player.index
+			local player_name = player.name
+			players[player_index] = player_name
+			if player.connected then
+				online_players[player_index] = player_name
+			else
+				offline_players[player_index] = player_name
+			end
+		end
+	end
+end
+
 
 ---@param name string
 function isPlayerConnected(name)
@@ -162,7 +183,7 @@ function isPlayerExist(name)
 	if not is_server then return end
 	local player = game.get_player(name)
 	if player and player.valid then
-		print_to_rcon('+')
+		print_to_rcon(player.index)
 	else
 		print_to_rcon('-')
 	end
@@ -174,7 +195,7 @@ function isPlayerAFK(name)
 	local player = game.get_player(name)
 	if not (player and player.valid) then return end
 	if player.afk_time > 60 * 60 then
-		print_to_rcon('+')
+		print_to_rcon(player.afk_time)
 	else
 		print_to_rcon('-')
 	end
@@ -189,16 +210,16 @@ function giveItemStackToPLayer(item_name)
 		return
 	end
 	if not player.can_insert(item_name) then
-		print_to_rcon('-')
+		print_to_rcon(0)
 		return
 	end
-	player.insert(item_name)
-	print_to_rcon('+')
+
+	print_to_rcon(player.insert(item_name))
 end
 
 
-local itemStack = {name=""}
-local itemsStack = {name="", count=1}
+local full_item_stack = {name=""}
+local item_stack = {name="", count=1}
 ---@param item_name string
 ---@param count? integer
 function giveItemToPLayer(item_name, count)
@@ -209,24 +230,23 @@ function giveItemToPLayer(item_name, count)
 	end
 
 	if count then
-		itemsStack.name = item_name
-		itemsStack.count = count
-		if not player.can_insert(itemsStack) then
-			print_to_rcon('-')
+		item_stack.name = item_name
+		item_stack.count = count
+		if not player.can_insert(item_stack) then
+			print_to_rcon(0)
 			return
 		end
-		player.insert(itemsStack)
-		print_to_rcon('+')
+		print_to_rcon(player.insert(item_stack))
 		return
 	end
 
-	itemStack.name = item_name
-	if not player.can_insert(itemStack) then
-		print_to_rcon('-')
+	full_item_stack.name = item_name
+	if not player.can_insert(full_item_stack) then
+		print_to_rcon(0)
 		return
 	end
-	player.insert(itemStack)
-	print_to_rcon('+')
+
+	print_to_rcon(player.insert(full_item_stack))
 end
 
 
@@ -268,19 +288,7 @@ function getForceInfo(force)
 	force_info.friendly_fire = _force.friendly_fire
 	force_info.research_enabled = _force.ai_controllable
 
-	force_info.players = {}
-	force_info.online_players = {}
-	force_info.offline_players = {}
-	for _, player in pairs(_force.players) do
-		if player.valid then
-			force_info.players[player.index] = player.name
-			if player.connected then
-				force_info.online_players[player.index] = player.name
-			else
-				force_info.offline_players[player.index] = player.name
-			end
-		end
-	end
+	update_player_data(force_info)
 
 	force_info.researched_technologies = {}
 	local researched_technologies = force_info.researched_technologies
@@ -300,6 +308,18 @@ function getForces()
 		end
 	end
 	print_to_rcon(game.table_to_json(result))
+end
+
+
+---@param name string
+function isForceExist(name)
+	if not is_server then return end
+	local force = game.forces[name]
+	if force and force.valid then
+		print_to_rcon(force.index)
+	else
+		print_to_rcon('-')
+	end
 end
 
 ---@param name string
@@ -381,19 +401,7 @@ function getSurfaceInfo(surface)
 	surface_info.solar_power_multiplier = surface.solar_power_multiplier
 	surface_info.total_pollution = surface.get_total_pollution()
 
-	surface_info.players = {}
-	surface_info.online_players = {}
-	surface_info.offline_players = {}
-	for _, player in pairs(game.players) do
-		if player.valid and player.surface == surface then
-			surface_info.players[player.index] = player.name
-			if player.connected then
-				surface_info.online_players[player.index] = player.name
-			else
-				surface_info.offline_players[player.index] = player.name
-			end
-		end
-	end
+	update_player_data(surface_info)
 
 	print_to_rcon(game.table_to_json(surface_info))
 end
@@ -424,31 +432,21 @@ function getGameInfo()
 	game_info.speed = surface.speed
 	game_info.tick_paused = surface.tick_paused
 
-	game_info.players = {}
-	game_info.online_players = {}
-	game_info.offline_players = {}
-	for _, player in pairs(surface.players) do
-		if player.valid then
-			game_info.players[player.index] = player.name
-			if player.connected then
-				game_info.online_players[player.index] = player.name
-			else
-				game_info.offline_players[player.index] = player.name
-			end
-		end
-	end
+	update_player_data(game_info)
 
 	game_info.surfaces = {}
+	local surfaces = game_info.surfaces
 	for _, surface in pairs(surface.surfaces) do
 		if surface.valid then
-			game_info.surfaces[surface.index] = surface.name
+			surfaces[surface.index] = surface.name
 		end
 	end
 
 	game_info.forces = {}
+	local forces = game_info.forces
 	for _, force in pairs(surface.forces) do
 		if force.valid then
-			game_info.forces[force.index] = force.name
+			forces[force.index] = force.name
 		end
 	end
 
