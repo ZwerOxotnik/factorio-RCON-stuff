@@ -167,7 +167,7 @@ function getPlayerInfo(_player)
 		player_info.health = nil
 	end
 
-	print_to_rcon(game.table_to_json(player_info))
+	print_to_rcon(helpers.table_to_json(player_info))
 end
 
 ---@param name string
@@ -278,11 +278,11 @@ function getForceInfo(force)
 	force_info.name = _force.name
 	force_info.index = _force.index
 	force_info.rockets_launched = _force.rockets_launched
-	force_info.ghost_time_to_live = _force.ghost_time_to_live
-	force_info.evolution_factor = _force.evolution_factor
-	force_info.evolution_factor_by_time = _force.evolution_factor_by_time
-	force_info.evolution_factor_by_pollution = _force.evolution_factor_by_pollution
-	force_info.evolution_factor_by_killing_spawners = _force.evolution_factor_by_killing_spawners
+	force_info.create_ghost_on_entity_death = _force.create_ghost_on_entity_death
+	force_info.evolution_factor = _force.get_evolution_factor()
+	force_info.evolution_factor_by_time = _force.get_evolution_factor_by_time()
+	force_info.evolution_factor_by_pollution = _force.get_evolution_factor_by_pollution()
+	force_info.evolution_factor_by_killing_spawners = _force.get_evolution_factor_by_killing_spawners()
 	force_info.share_chart = _force.share_chart
 	force_info.ai_controllable = _force.ai_controllable
 	force_info.friendly_fire = _force.friendly_fire
@@ -296,7 +296,7 @@ function getForceInfo(force)
 		researched_technologies[#researched_technologies+1] = tech_name
 	end
 
-	print_to_rcon(game.table_to_json(force_info))
+	print_to_rcon(helpers.table_to_json(force_info))
 end
 
 function getForces()
@@ -307,7 +307,7 @@ function getForces()
 			result[#result+1] = force.name
 		end
 	end
-	print_to_rcon(game.table_to_json(result))
+	print_to_rcon(helpers.table_to_json(result))
 end
 
 
@@ -339,7 +339,7 @@ function getPlayers()
 		end
 	end
 	if #result > 0 then
-		print_to_rcon(game.table_to_json(result))
+		print_to_rcon(helpers.table_to_json(result))
 	end
 end
 
@@ -352,7 +352,7 @@ function getConnectedPlayers()
 		end
 	end
 	if #result > 0 then
-		print_to_rcon(game.table_to_json(result))
+		print_to_rcon(helpers.table_to_json(result))
 	end
 end
 
@@ -403,7 +403,7 @@ function getSurfaceInfo(surface)
 
 	update_player_data(surface_info)
 
-	print_to_rcon(game.table_to_json(surface_info))
+	print_to_rcon(helpers.table_to_json(surface_info))
 end
 
 
@@ -450,7 +450,7 @@ function getGameInfo()
 		end
 	end
 
-	print_to_rcon(game.table_to_json(game_info))
+	print_to_rcon(helpers.table_to_json(game_info))
 end
 
 
